@@ -2,6 +2,7 @@ import React from 'react';
 import VideoItem from './VideoItem';
 import { useTable, useSortBy, usePagination } from 'react-table';
 
+
 const VideoList = ({ videos, handleVideoSelect }) => {
   console.log(videos);
   const renderedVideos = videos.map((video) => {

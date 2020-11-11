@@ -14,6 +14,7 @@ const VideoItem = ({ video, handleVideoSelect }) => {
   
 
   return (
+    
     <tr onClick={() => handleVideoSelect(video)} className='videoList'>
       <td>{title}</td>
       <td>{new Date(publishedAt).toDateString()}</td>

@@ -2,56 +2,30 @@ import React from 'react';
 
 function Info(props) {
   return (
-    <div className='youtube-user-top-header'>
-      <div className='youtube-user-top-header-background'>
-        <img
+    <div>
+      <section className='channel-banner'>
+        <img 
           src={props.banner}
-          alt=''
-          title=''
+          alt='channel-banner'
+          title='Youtube-Channel-Banner'
         ></img>
-      </div>
-      <div className='youtube-user-top-info-wrap'>
-        <img
-          className='youtube-user-top-info-avatar'
-          src={props.thumbnail}
-          alt=''
-          title=''
-        ></img>
-        <h1 className='youtube-user-top-info-title'>{props.title}</h1>
-        <div className='youtube-user-top-info-block-top'>
-          <div className='youtube-user-top-info'>
-            <span class='youtube-user-top-light'>Uploads</span>
-            <br></br>
-            <span className='youtube-stats-header-uploads'>
-              {props.videocount}
-            </span>
+      </section>
+      <section className='channel-info'>
+        <div className='info-container'>
+          <div className='channel-avatar'>
+            <img
+              className='youtube-user-top-info-avatar'
+              src={props.thumbnail}
+              alt=''
+              title=''
+            ></img>
           </div>
-          <div className='youtube-user-top-info'>
-            <span class='youtube-user-top-light'>Subscribers</span>
-            <br></br>
-            <span className='youtube-stats-header-uploads'>
-              {props.subscribers}
-            </span>
-          </div>
-          <div className='youtube-user-top-info'>
-            <span class='youtube-user-top-light'>Video Views</span>
-            <br></br>
-            <span className='youtube-stats-header-uploads'>{props.views}</span>
-          </div>
-          <div className='youtube-user-top-info'>
-            <span class='youtube-user-top-light'>Country</span>
-            <br></br>
-            <span className='youtube-stats-header-uploads'>{props.country}</span>
-          </div>
-          <div className='youtube-user-top-info'>
-            <span class='youtube-user-top-light'>Channel Created</span>
-            <br></br>
-            <span className='youtube-stats-header-uploads'>
-              {props.published}
-            </span>
+          <div className='channel-title'>
+            <h1>{props.title}</h1>
+            <div class='channel-subscriber-count'></div>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }

@@ -3,6 +3,14 @@ import youtube from '../apis/youtube';
 import Form from './Form';
 import Results from './Results';
 import VideoList, { columns, Table } from './VideoList';
+import InfoWidgets from './metrics/InfoWidgets';
+
+import SideBar from './SideBar';
+import Graph from './Graph';
+import Info from './metrics/Info';
+import MainSection from './MainSection';
+import VideoFeed from './VideoFeed';
+
 
 // import VideoDetail from './VideoDetail';
 
@@ -48,7 +56,6 @@ class App extends React.Component {
 
     const playlistId =
       response.data.items[0].contentDetails.relatedPlaylists.uploads;
-    
 
     this.setState({
       banner: response.data.items[0].brandingSettings.image.bannerImageUrl,
@@ -84,26 +91,18 @@ class App extends React.Component {
 
   fetchData = async ({ pageSize, pageIndex }) => {
     if (this.state.loading) return;
-    console.log(pageIndex, pageSize)
-    if((pageIndex * pageSize) < this.state.videos.length){
-
+    console.log(pageIndex, pageSize);
+    if (pageIndex * pageSize < this.state.videos.length) {
       const startRow = pageSize * pageIndex;
       const endRow = startRow + pageSize;
 
-      
-
       const displayedVideos = this.state.videos.slice(startRow, endRow);
 
-      
-
       this.setState({
-        
         displayedVideos,
-        
       });
-      return
-
-    } 
+      return;
+    }
     // Set the loading state
     console.log(this.state);
     this.setState({
@@ -111,7 +110,6 @@ class App extends React.Component {
     });
 
     // This will get called when the table needs new data
-    
 
     // Give this fetch an ID
     const playlist = await youtube.get('/playlistItems', {
@@ -142,48 +140,50 @@ class App extends React.Component {
     const videodetails = await youtube.get('/videos', {
       params: {
         part: 'snippet,contentDetails,statistics',
-        
+
         id: x,
       },
     });
 
-    
-      const startRow = pageSize * pageIndex;
-      const endRow = startRow + pageSize;
+    const startRow = pageSize * pageIndex;
+    const endRow = startRow + pageSize;
 
-      const pageArray = [...this.state.videos, ...videodetails.data.items];
+    const pageArray = [...this.state.videos, ...videodetails.data.items];
 
-      const displayedVideos = pageArray.slice(startRow, endRow);
+    const displayedVideos = pageArray.slice(startRow, endRow);
 
-      console.log(videodetails.data.items.length, pageSize)
+    console.log(videodetails.data.items.length, pageSize);
 
-      this.setState({
-        videos: pageArray,
-        displayedVideos,
-        pageCount: Math.ceil(pageArray.length / pageSize) + (pageSize === videodetails.data.items.length ? 1 : 0),
-      });
+    this.setState({
+      videos: pageArray,
+      displayedVideos,
+      pageCount:
+        Math.ceil(pageArray.length / pageSize) +
+        (pageSize === videodetails.data.items.length ? 1 : 0),
+    });
 
-      this.setState({
-        loading: false,
-      });
-    
+    this.setState({
+      loading: false,
+    });
   };
+  render;
 
   render() {
     if (this.state.playlistid === '') {
       return (
-        <div className='container'>
-          <Form handleFormSubmit={this.handleSubmit} />
-        </div>
+        <main className='fixed-nav sticky-footer bg-dark' id='page-top'>
+          <SideBar handleFormSubmit={this.handleSubmit} />
+
+          
+        </main>
       );
     }
     const data = this.state.displayedVideos.map((item) => {
-      
       return {
         title: item.snippet.title,
         publishedAt: new Date(item.snippet.publishedAt).toDateString(),
         viewCount: this.numberWithCommas(item.statistics.viewCount),
-        likeCount: (item.statistics.likeCount),
+        likeCount: item.statistics.likeCount,
         dislikeCount: item.statistics.dislikeCount,
       };
     });
@@ -191,31 +191,47 @@ class App extends React.Component {
     console.log(data);
 
     return (
-      <div className='container'>
-        <Form handleFormSubmit={this.handleSubmit} />
-
-        <Results
-          description={this.state.description}
-          published={new Date(this.state.published).toDateString()}
-          title={this.state.title}
-          views={this.numberWithCommas(this.state.views)}
-          subscribers={this.numberWithCommas(this.state.subscribers)}
-          videocount={this.numberWithCommas(this.state.videocount)}
+      <main className='fixed-nav sticky-footer bg-dark' id='page-top'>
+        <SideBar handleFormSubmit={this.handleSubmit} />
+        <InfoWidgets
           thumbnail={this.state.thumbnail}
-          country={this.state.country}
           banner={this.state.banner}
+          published={new Date(this.state.published).toDateString()}
+          views={this.state.views}
+          subscribers={this.state.subscribers}
+          videocount={this.state.videocount}
+          video={this.state.selectedVideo}
         />
-
-        <div className='Table'>
-          <Table
-            columns={columns}
-            videos={data}
-            fetchData={this.fetchData}
-            loading={false}
-            pageCount={this.state.pageCount}
-          />
-        </div>
-      </div>
+        <div className='content-wrapper'>
+          <div className='container-fluid'>
+            
+              <div className='card mb-3'>
+                <div className='card-header'>
+                  <i className='fa fa-table'></i> Video List
+                </div>
+                <div className='card-body'>
+                  <div className='table-responsive'>
+                    <table
+                      className='table table-bordered'
+                      id='dataTable'
+                      width='100%'
+                      cellspacing='0'
+                    >
+                      <Table
+                        columns={columns}
+                        videos={data}
+                        fetchData={this.fetchData}
+                        loading={false}
+                        pageCount={this.state.pageCount}
+                      />
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        
+      </main>
     );
   }
 }

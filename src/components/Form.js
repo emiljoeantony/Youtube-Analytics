@@ -1,16 +1,12 @@
 import React, { Component } from 'react';
 
-
-
 class Form extends Component {
   state = {
     input: '',
-    
   };
   handleChange = (event) => {
     this.setState({
       input: event.target.value,
-      
     });
   };
   handleSubmit = (event) => {
@@ -20,35 +16,28 @@ class Form extends Component {
   };
   render() {
     return (
-      <div className='header'>
-        <div className='main-menu-container'>
-          <div className='logo'>
-            Influencer's Ink
-          </div>
-          <div className='logo-break'>
-            <div className='search-container'>
-              <form onSubmit={this.handleSubmit} className='input-field'>
-                <div className='input-label'>
-                  <label htmlFor='video-search'></label>
-                  <input
-                    onChange={this.handleChange}
-                    name='Search'
-                    type='text'
-                    placeholder='Enter YouTube Channel Id'
-                  />
-                  <button
-                    className='search-button'
-                    type='submit'
-                    value='search'
-                  >
-                    s
-                  </button>
-                </div>
-              </form>
+      <ul className='navbar-nav ml-auto'>
+        <li className='nav-item'>
+          <form
+            onSubmit={this.handleSubmit}
+            className='form-inline my-2 my-lg-0 mr-lg-2'
+          >
+            <div className='input-group'>
+              <input
+                onChange={this.handleChange}
+                className='form-control'
+                type='text'
+                placeholder='Search for...'
+              />
+              <span className='input-group-append'>
+                <button className='btn btn-primary' type='button'>
+                  <i className='fa fa-search'></i>
+                </button>
+              </span>
             </div>
-          </div>
-        </div>
-      </div>
+          </form>
+        </li>
+      </ul>
     );
   }
 }
